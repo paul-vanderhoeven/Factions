@@ -9,9 +9,9 @@ public class Main extends JavaPlugin{
 	
 	public void onEnable() {
 		
-		//registerCommands();
+		registerCommands();
 		getServer().getConsoleSender().sendMessage("§a=== Plugin Factions ===");
-		getServer().getConsoleSender().sendMessage("§aPlugin activé !");
+		getServer().getConsoleSender().sendMessage("§aPlugin activee !");
 	}
 	
 	
