@@ -1,10 +1,14 @@
 package Factions.Commands;
 
+import java.util.Date;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import Factions.FJoinDemand;
 import Factions.Faction;
+import net.minecraft.server.v1_14_R1.CustomFunction.d;
 
 public class FJoin implements SubCommand {
 
@@ -23,14 +27,17 @@ public class FJoin implements SubCommand {
 				return false;
 			}
 			Faction f = Faction.getFaction(args[1]);
-			if(f!=null) {
-				f.addPlayer(p);
-				p.sendMessage("§aVous avez rejoint la faction.");
-				f.broadcast("Le joueur " + p.getName() + " a rejoint la faction.");
-			}
-			else {
+			if(f==null) {
 				p.sendMessage("§4La faction n'existe pas.");
 				return false;
+			}
+			
+			
+			else{
+				p.sendMessage("Une demande a été envoyé au chef de la faction");
+				f.getChef().sendMessage("Le joueur " + p.getName() + " demande à rejoindre la faction, vous avez 60s pour accepter => /f accept");
+				Date date = new Date();
+				f.setDemande(new FJoinDemand(p, f, date.getTime()+60000));	//60s pour accepter la demande
 			}
 			
 		}

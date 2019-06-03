@@ -15,6 +15,7 @@ public class FCommand implements CommandExecutor {
 		subcommand.put("status", new FStatus());
 		subcommand.put("list", new FList());
 		subcommand.put("join", new FJoin());
+		subcommand.put("accept", new FAccept());
 	}
 	
 	@Override
@@ -28,8 +29,9 @@ public class FCommand implements CommandExecutor {
 
 }
 
-//f create <nom>
+//f create <nomFaction>
 //f status
 //f list
 //f f status <faction>
-//f join <nom>
+//f join <faction>
+//f accept

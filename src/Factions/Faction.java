@@ -2,6 +2,7 @@ package Factions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,7 @@ public class Faction {
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
+	private FJoinDemand demande;
 	
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
@@ -41,15 +43,49 @@ public class Faction {
 	public String getNom() {
 		return nom;
 	}
-	
+
+
 	public void addPlayer(Player p) {
 		membres.add(p);
 		joueurFactions.put(p, this);
 	}
 	public String toString() {
+		StringJoiner joiner=new StringJoiner(",");
+		for(Player p : membres) {
+			joiner.add(p.getName());
+		}
 		return "=== Faction " + nom + " ===\n" +
-				"Membres: " + membres.toString();
+				"Membres: " + joiner.toString();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Faction other = (Faction) obj;
+		if (nom == null) {
+			if (other.nom != null)
+				return false;
+		} else if (!nom.equals(other.nom))
+			return false;
+		return true;
+	}
+	public Player getChef() {
+		return chef;
+	}
+
+	public FJoinDemand getDemande() {
+		return demande;
+	}
+
+	public void setDemande(FJoinDemand demande) {
+		this.demande = demande;
+	}
+
 	//--------------------------------Méthodes static
 	
 	public static HashMap<Player, Faction> getPlayerFaction() {
@@ -76,6 +112,12 @@ public class Faction {
 			}
 		}
 		return null;
+	}
+	public static boolean estDansMemeFaction(Player p1, Player p2) {
+		if(joueurFactions.containsKey(p1) && joueurFactions.containsKey(p2)) {
+			return getPlayerFaction(p1).equals(getPlayerFaction(p2));
+		}
+		return false;
 	}
 	
 	//--------------------------------------------------------------
