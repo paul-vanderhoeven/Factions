@@ -19,14 +19,19 @@ public class FJoinDemand {
 	}
 	
 	public void accept() {
+		
 		Date date = new Date();
-		if(date.getTime()<=dateButoire) {
+
+		if(Faction.estDansFaction(p)) {
+			p.sendMessage("§4Vous êtes dans une faction.");
+		}
+		else if(date.getTime()>dateButoire) {
+			f.getChef().sendMessage("§4Trop tard.");
+		}
+		else {
 			f.addPlayer(p);
 			p.sendMessage("§aVous avez rejoint la faction");
 			f.broadcast("§aLe joueur " + p.getName() + "§a a rejoint la faction");
-		}
-		else {
-			f.getChef().sendMessage("§4Trop tard.");
 		}
 	}
 	

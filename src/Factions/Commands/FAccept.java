@@ -21,6 +21,7 @@ public class FAccept implements SubCommand {
 			else {
 				if(f.getChef().equals(p)) {
 					f.getDemande().accept();
+					
 				}
 				else {
 					p.sendMessage("§4Vous n'êtes pas le chef de votre faction.");

@@ -120,6 +120,10 @@ public class Faction {
 		return false;
 	}
 	
+	public static boolean estDansFaction(Player p) {
+		return joueurFactions.containsKey(p);
+	}
+	
 	//--------------------------------------------------------------
 	
 	public boolean appartient(Player p) {
