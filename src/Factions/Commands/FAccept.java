@@ -17,14 +17,23 @@ public class FAccept implements SubCommand {
 			Faction f=Faction.getPlayerFaction(p);
 			if(f==null) {
 				p.sendMessage("§4Vous n'êtes pas dans une faction.");
+				return true;
 			}
 			else {
 				if(f.getChef().equals(p)) {
-					f.getDemande().accept();
+					if(f.getDemande() != null) {
+						f.getDemande().accept();
+						return true;
+					}
+					else {
+						p.sendMessage("§4Il n'y a pas de demande pour rejoindre la faction.");
+						return true;
+					}
 					
 				}
 				else {
 					p.sendMessage("§4Vous n'êtes pas le chef de votre faction.");
+					return true;
 				}
 			}
 		}

@@ -31,7 +31,7 @@ public class FJoinDemand {
 		else {
 			f.addPlayer(p);
 			p.sendMessage("§aVous avez rejoint la faction");
-			f.broadcast("§aLe joueur " + p.getName() + "§a a rejoint la faction");
+			f.broadcastFaction("§aLe joueur " + p.getName() + "§a a rejoint la faction");
 		}
 	}
 	

@@ -20,16 +20,13 @@ public class FJoin implements SubCommand {
 			
 			if(args.length==1) {
 				p.sendMessage("§4Quelle faction ?");
-				return false;
 			}
 			if(Faction.getPlayerFaction().containsKey(p)) {
 				p.sendMessage("§4Vous êtes déjà dans une faction.");
-				return false;
 			}
 			Faction f = Faction.getFaction(args[1]);
 			if(f==null) {
 				p.sendMessage("§4La faction n'existe pas.");
-				return false;
 			}
 			
 			
@@ -38,6 +35,7 @@ public class FJoin implements SubCommand {
 				f.getChef().sendMessage("Le joueur " + p.getName() + " demande à rejoindre la faction, vous avez 60s pour accepter => /f accept");
 				Date date = new Date();
 				f.setDemande(new FJoinDemand(p, f, date.getTime()+60000));	//60s pour accepter la demande
+				return true;
 			}
 			
 		}

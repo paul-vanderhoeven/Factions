@@ -85,6 +85,51 @@ public class Faction {
 	public void setDemande(FJoinDemand demande) {
 		this.demande = demande;
 	}
+	
+	public boolean appartient(Player p) {
+		return membres.contains(p);
+	}
+	public void broadcastFaction(String message) {
+		for(Player p : membres) {
+			p.sendMessage(message);
+		}
+	}
+	
+	public void removePlayer(Player p) {
+		joueurFactions.remove(p);
+		membres.remove(p);
+
+		
+	}
+	/**
+	 * Retire le joueur de la faction, l'enlève de membres.
+	 * Si le joueur est le chef => impossible, si il est le dernier joueur => supprime la faction
+	 * @param p joueur qui supprime la faction
+	 */
+	public void leave(Player p) {
+		if(membres.size()==1) {
+			removePlayer(p);
+			listeFactions.remove(this);
+			p.sendMessage("§4Vous avez quitté la faction, elle a été supprimée.");
+		}
+		else if(getChef().equals(p)) {
+			p.sendMessage("§4Impossible, vous êtes le chef de votre faction. Utilisez /f leader pour changez de chef.");
+		}
+		else {
+			removePlayer(p);
+			p.sendMessage("§4Vous avez quitté la faction.");
+			broadcastFaction("§4Le joueur " + p.getName() + " a quitté la faction.");
+
+		}
+	}
+	
+	public void disband() {
+		broadcastFaction("§4La faction a été supprimé.");
+		for(Player p : new ArrayList<Player>(membres)) {
+			removePlayer(p);
+		}
+		listeFactions.remove(this);
+	}
 
 	//--------------------------------Méthodes static
 	
@@ -126,12 +171,4 @@ public class Faction {
 	
 	//--------------------------------------------------------------
 	
-	public boolean appartient(Player p) {
-		return membres.contains(p);
-	}
-	public void broadcast(String message) {
-		for(Player p : membres) {
-			p.sendMessage(message);
-		}
-	}
 }
