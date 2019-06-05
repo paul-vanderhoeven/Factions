@@ -19,7 +19,7 @@ public class FList implements SubCommand {
 		}
 		sender.sendMessage(joiner.toString());
 		sender.sendMessage("==========================");
-		return false;
+		return true;
 	}
 
 }

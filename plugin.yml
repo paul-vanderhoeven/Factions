@@ -4,7 +4,7 @@ main: Factions.Main
 version: 1.0
 commands:
   f:
-    usage: "Erreur de la commande !
+    usage: "Erreur de syntaxe ! Essayez:
       	\n/f create <nomFaction>
 		\n/f status
 		\n/f f status <faction>
@@ -12,4 +12,5 @@ commands:
 		\n/f join <faction>
 		\n/f accept
 		\n/f leave
-		\n/f disband <faction>"
+		\n/f disband <faction>
+		\n/f leader <joueur>"

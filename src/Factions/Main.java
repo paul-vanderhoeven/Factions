@@ -2,6 +2,7 @@ package Factions;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,7 +13,10 @@ import Factions.Events.onPvp;
 
 public class Main extends JavaPlugin{
 	
+	static Plugin main;
+	
 	public void onEnable() {
+		main = this;
 		
 		registerCommands();
 		registerListeners();
@@ -40,6 +44,10 @@ public class Main extends JavaPlugin{
 		
 		pm.registerEvents(new onPlayerJoin(), this);
 		pm.registerEvents(new onPvp(), this);
+	}
+	
+	public static Plugin getMain() {
+		return main;
 	}
 
 }

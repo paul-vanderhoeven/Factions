@@ -18,6 +18,7 @@ public class FCommand implements CommandExecutor {
 		subcommand.put("accept", new FAccept());
 		subcommand.put("leave", new FLeave());
 		subcommand.put("disband", new FDisband());
+		subcommand.put("leader", new FLeader());
 	}
 	
 	@Override

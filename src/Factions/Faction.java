@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringJoiner;
 
+import javax.lang.model.element.Element;
+
 import org.bukkit.entity.Player;
 
 public class Faction {
@@ -55,6 +57,7 @@ public class Faction {
 			joiner.add(p.getName());
 		}
 		return "=== Faction " + nom + " ===\n" +
+				"Chef: " + chef.getName() +"\n" +
 				"Membres: " + joiner.toString();
 	}
 	
@@ -86,8 +89,25 @@ public class Faction {
 		this.demande = demande;
 	}
 	
+	public ArrayList<Player> getMembres() {
+		return membres;
+	}
+
 	public boolean appartient(Player p) {
 		return membres.contains(p);
+	}
+	public boolean appartient(String p) {
+		return appartient(Main.getMain().getServer().getPlayer(p));
+	}
+	public Player getPlayer(String p) {
+		if(appartient(p)) {
+			for(Player membre : membres) {
+				if(membre.getName().equals(p)) {
+					return membre;
+				}
+			}
+		}
+		return null;
 	}
 	public void broadcastFaction(String message) {
 		for(Player p : membres) {
@@ -129,6 +149,24 @@ public class Faction {
 			removePlayer(p);
 		}
 		listeFactions.remove(this);
+	}
+	
+	/**
+	 * Change le chef de la faction
+	 * @param p joueur qui remplace le chef
+	 */
+	public void changerChef(Player p) {
+		if(this.appartient(p)) {
+			if(getChef().equals(p)) {
+				p.sendMessage("§4Vous êtes déjà le chef.");
+			}
+			else {
+				chef=p;
+				p.sendMessage("§aVous êtes maintenant le chef de cette faction.");
+				broadcastFaction(p.getName() + " est maintenant le chef de la faction.");
+			}
+		}
+
 	}
 
 	//--------------------------------Méthodes static
