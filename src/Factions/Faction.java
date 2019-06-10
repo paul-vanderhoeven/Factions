@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringJoiner;
 
-import javax.lang.model.element.Element;
-
 import org.bukkit.entity.Player;
 
 public class Faction {

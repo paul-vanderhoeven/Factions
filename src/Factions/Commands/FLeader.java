@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import Factions.Faction;
-import Factions.Main;
 
 public class FLeader implements SubCommand {
 
