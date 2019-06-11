@@ -1,12 +1,16 @@
 package Factions.Commands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
-public class FCommand implements CommandExecutor {
+public class FCommand implements CommandExecutor, TabCompleter {
 	
 	private static HashMap<String, SubCommand> subcommand = new HashMap<String, SubCommand>();
 
@@ -30,13 +34,31 @@ public class FCommand implements CommandExecutor {
 		return false;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+
+		List<String> tab = new ArrayList<String>();
+		if(sender instanceof Player) {
+			Player p = (Player) sender;
+			if(args.length==1) {
+				tab.addAll(subcommand.keySet());
+			}
+			else {
+				if(subcommand.containsKey(args[0])) {
+					tab.addAll(subcommand.get(args[0]).getTabCompleter(p));
+				}
+			}
+		}
+		return tab;
+	}
+
 }
 
 //f create <nomFaction>
 //f status
 //f f status <faction>
 //f list
+//f invite <joueur>
 //f join <faction>
-//f accept
 //f leave
 //f disband <faction>

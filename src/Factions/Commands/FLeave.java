@@ -1,5 +1,8 @@
 package Factions.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,6 +21,11 @@ public class FLeave implements SubCommand {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> getTabCompleter(Player p) {
+		return new ArrayList<String>();
 	}
 
 }

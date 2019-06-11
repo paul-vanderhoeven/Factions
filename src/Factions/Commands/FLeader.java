@@ -1,5 +1,8 @@
 package Factions.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,5 +32,18 @@ public class FLeader implements SubCommand {
 		}
 		return false;
 	}
+
+	@Override
+	public List<String> getTabCompleter(Player p) {
+		
+		ArrayList<String> tab = new ArrayList<String>();
+		
+		for(Player p1 : Faction.getPlayerFaction(p).getMembres()) {
+			tab.add(p1.getName());
+		}
+		
+		return tab;
+	}
+
 
 }

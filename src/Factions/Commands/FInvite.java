@@ -1,5 +1,9 @@
 package Factions.Commands;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,6 +42,17 @@ public class FInvite implements SubCommand {
 
 		}
 		return true;
+	}
+	
+	public List<String> getTabCompleter(Player p1) {
+		
+		List<String> joueur = new LinkedList<String>();
+		
+		for(Player p : Main.getMain().getServer().getOnlinePlayers()) {
+			joueur.add(p.getName());
+		}
+		return joueur;
+		
 	}
 
 }

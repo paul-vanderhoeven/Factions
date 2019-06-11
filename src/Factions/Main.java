@@ -2,7 +2,6 @@ package Factions;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,7 +12,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import Factions.Commands.CommandCompleter;
 import Factions.Commands.FCommand;
 import Factions.Events.onPlayerJoin;
 import Factions.Events.onPvp;
@@ -43,7 +41,7 @@ public class Main extends JavaPlugin{
 
 		CommandExecutor fcommand = new FCommand();
 		getCommand("f").setExecutor(fcommand);
-		TabCompleter tc = new CommandCompleter();
+		TabCompleter tc = new FCommand();
 		getCommand("f").setTabCompleter(tc);
 	}
 	
