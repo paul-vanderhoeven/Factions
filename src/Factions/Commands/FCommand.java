@@ -15,7 +15,7 @@ public class FCommand implements CommandExecutor {
 		subcommand.put("status", new FStatus());
 		subcommand.put("list", new FList());
 		subcommand.put("join", new FJoin());
-		subcommand.put("accept", new FAccept());
+		subcommand.put("invite", new FInvite());
 		subcommand.put("leave", new FLeave());
 		subcommand.put("disband", new FDisband());
 		subcommand.put("leader", new FLeader());

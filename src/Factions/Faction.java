@@ -14,7 +14,7 @@ public class Faction {
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
-	private FJoinDemand demande;
+	private Invitation demande;
 	
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
@@ -79,11 +79,11 @@ public class Faction {
 		return chef;
 	}
 
-	public FJoinDemand getDemande() {
+	public Invitation getDemande() {
 		return demande;
 	}
 
-	public void setDemande(FJoinDemand demande) {
+	public void setDemande(Invitation demande) {
 		this.demande = demande;
 	}
 	

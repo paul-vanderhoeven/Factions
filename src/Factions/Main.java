@@ -63,6 +63,24 @@ public class Main extends JavaPlugin{
 		try {
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/paul", "root", "");
 			getServer().getConsoleSender().sendMessage("§aConnecté à la base de données.");
+			
+			try {
+				Statement statement = connection.createStatement();
+				
+				int resultat = statement.executeUpdate("create table if not exists Factions (nom VARCHAR(100) primary key, "
+						+ "chef VARCHAR(100) unique not null);");
+				
+				resultat = statement.executeUpdate("create table if not exists Membres (faction VARCHAR(100), "
+						+ "joueur VARCHAR(100));");			
+				resultat = statement.executeUpdate("alter table Membres add constraint PK_Membres primary key (faction, joueur);");
+				resultat = statement.executeUpdate("alter table Membres add constraint FK_Faction foreign key (faction) references Factions(nom);");
+
+				getServer().getConsoleSender().sendMessage("§aTables crées.");
+			} catch (SQLException e) {
+				getServer().getConsoleSender().sendMessage("§4Impossible de créer les tables.");
+				e.printStackTrace();
+			}
+			
 		} catch (SQLException e) {
 
 			getServer().getConsoleSender().sendMessage("§4Erreur de connection à la base de données.");
@@ -71,22 +89,7 @@ public class Main extends JavaPlugin{
 			e.printStackTrace();
 		}
 		
-		try {
-			Statement statement = connection.createStatement();
-			
-			int resultat = statement.executeUpdate("create table if not exists Factions (nom VARCHAR(100) primary key, "
-					+ "chef VARCHAR(100) unique not null);");
-			
-			resultat = statement.executeUpdate("create table if not exists Membres (faction VARCHAR(100), "
-					+ "joueur VARCHAR(100));");			
-			resultat = statement.executeUpdate("alter table Membres add constraint PK_Membres primary key (faction, joueur);");
-			resultat = statement.executeUpdate("alter table Membres add constraint FK_Faction foreign key (faction) references Factions(nom);");
 
-			getServer().getConsoleSender().sendMessage("§aTables crées.");
-		} catch (SQLException e) {
-			getServer().getConsoleSender().sendMessage("§4Impossible de créer les tables.");
-			e.printStackTrace();
-		}
 	}
 
 }
