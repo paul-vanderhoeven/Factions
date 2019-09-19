@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import Factions.Faction;
-import Factions.Main;
 
 public class FStatus implements SubCommand {
 	
@@ -32,7 +31,7 @@ public class FStatus implements SubCommand {
 					return true;
 				}
 				else {
-					p.sendMessage("§4Vous n'êtes pas dans une faction");
+					p.sendMessage("ï¿½4Vous n'ï¿½tes pas dans une faction");
 					return false;
 				}	
 			}
@@ -47,7 +46,7 @@ public class FStatus implements SubCommand {
 						return true;
 					}
 				}
-				p.sendMessage("§4La faction " + args[1] + " n'existe pas");
+				p.sendMessage("ï¿½4La faction " + args[1] + " n'existe pas");
 			}
 		}
 

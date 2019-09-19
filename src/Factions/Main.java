@@ -1,9 +1,6 @@
 package Factions;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -27,10 +24,10 @@ public class Main extends JavaPlugin{
 		registerCommands();
 		registerListeners();
 		
-		getServer().getConsoleSender().sendMessage("§a=== Plugin Factions ===");
-		getServer().getConsoleSender().sendMessage("§aChargement...");
+		getServer().getConsoleSender().sendMessage("Â§a=== Plugin Factions ===");
+		getServer().getConsoleSender().sendMessage("Â§aChargement...");
 		createTables();
-		getServer().getConsoleSender().sendMessage("§a=======================");
+		getServer().getConsoleSender().sendMessage("Â§a=======================");
 	}
 
 	public void onDisable() {
@@ -59,30 +56,28 @@ public class Main extends JavaPlugin{
 	
 	public void createTables() {
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/paul", "root", "");
-			getServer().getConsoleSender().sendMessage("§aConnecté à la base de données.");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/phpmyadmin", "phpmyadmin", "root");
+			getServer().getConsoleSender().sendMessage("Â§aConnection a la base de donnees.");
 			
 			try {
 				Statement statement = connection.createStatement();
 				
-				int resultat = statement.executeUpdate("create table if not exists Factions (nom VARCHAR(100) primary key, "
-						+ "chef VARCHAR(100) unique not null);");
+				statement.executeUpdate("create table if not exists Factions (nom VARCHAR(100) primary key, "
+						+ "chef VARCHAR(100) not null);");
 				
-				resultat = statement.executeUpdate("create table if not exists Membres (faction VARCHAR(100), "
-						+ "joueur VARCHAR(100));");			
-				resultat = statement.executeUpdate("alter table Membres add constraint PK_Membres primary key (faction, joueur);");
-				resultat = statement.executeUpdate("alter table Membres add constraint FK_Faction foreign key (faction) references Factions(nom);");
+				statement.executeUpdate("create table if not exists Membres (faction VARCHAR(100) references Factions(nom), "
+						+ "joueur VARCHAR(100) primary key);");
 
-				getServer().getConsoleSender().sendMessage("§aTables crées.");
+				getServer().getConsoleSender().sendMessage("Â§aTables crees.");
 			} catch (SQLException e) {
-				getServer().getConsoleSender().sendMessage("§4Impossible de créer les tables.");
+				getServer().getConsoleSender().sendMessage("Â§4Impossible de creer les tables.");
 				e.printStackTrace();
 			}
 			
 		} catch (SQLException e) {
 
-			getServer().getConsoleSender().sendMessage("§4Erreur de connection à la base de données.");
-			getServer().getConsoleSender().sendMessage("§4Désactivation du plugin.");
+			getServer().getConsoleSender().sendMessage("Â§4Erreur de connection a la base de donnees.");
+			getServer().getConsoleSender().sendMessage("Â§4Desactivation du plugin.");
 			Bukkit.getPluginManager().disablePlugin(this);
 			e.printStackTrace();
 		}

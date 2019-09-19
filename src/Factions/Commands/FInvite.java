@@ -1,6 +1,5 @@
 package Factions.Commands;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,22 +20,22 @@ public class FInvite implements SubCommand {
 			Player p = (Player) sender;
 			
 			if(!Faction.estDansFaction(p)) {
-				p.sendMessage("§4Vous n'êtes pas dans une faction.");
+				p.sendMessage("ï¿½4Vous n'ï¿½tes pas dans une faction.");
 			}
 			else if(!Faction.getPlayerFaction(p).getChef().equals(p)) {
-				p.sendMessage("§4Vous n'êtes pas le chef de votre faction.");
+				p.sendMessage("ï¿½4Vous n'ï¿½tes pas le chef de votre faction.");
 			}
 			else if(args.length==1) {
-				p.sendMessage("§4Qui ?");
+				p.sendMessage("ï¿½4Qui ?");
 			}
 			else if(Main.getMain().getServer().getPlayer(args[1]) == null) {
-				p.sendMessage("§4Le joueur n'est pas connecté.");
+				p.sendMessage("ï¿½4Le joueur n'est pas connectï¿½.");
 			}
 			else {
 				Faction f = Faction.getPlayerFaction(p);
-				p.sendMessage("§avous avez envoyé une invitation à " + Main.getMain().getServer().getPlayer(args[1]).getName());
+				p.sendMessage("ï¿½avous avez envoyï¿½ une invitation ï¿½ " + Main.getMain().getServer().getPlayer(args[1]).getName());
 				
-				Main.getMain().getServer().getPlayer(args[1]).sendMessage("§aVous avez reçu une invitation à rejoindre la faction " + Faction.getPlayerFaction(p).getNom() + ". Vous avez 60s pour accepter => /f accept.");
+				Main.getMain().getServer().getPlayer(args[1]).sendMessage("ï¿½aVous avez reï¿½u une invitation ï¿½ rejoindre la faction " + Faction.getPlayerFaction(p).getNom() + ". Vous avez 60s pour accepter => /f accept.");
 				f.setDemande(new Invitation(f, Main.getMain().getServer().getPlayer(args[1])));
 			}
 
