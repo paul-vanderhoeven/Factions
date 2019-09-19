@@ -2,7 +2,6 @@ package Factions;
 
 import java.sql.*;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
@@ -18,6 +17,7 @@ public class Main extends JavaPlugin{
 	static Plugin main;
 	static Connection connection;
 	
+	// méthode au lancement du plugin
 	public void onEnable() {
 		main = this;
 		
@@ -26,14 +26,19 @@ public class Main extends JavaPlugin{
 		
 		getServer().getConsoleSender().sendMessage("§a=== Plugin Factions ===");
 		getServer().getConsoleSender().sendMessage("§aChargement...");
-		createTables();
+		//BDD.connection();
+		BDD.createTables();
 		getServer().getConsoleSender().sendMessage("§a=======================");
 	}
 
+	// méthode à la désactivation du plugin
 	public void onDisable() {
 		
 	}
 	
+	/**
+	 * Enregistrement des commandes
+	 */
 	private void registerCommands() {
 
 		CommandExecutor fcommand = new FCommand();
@@ -42,6 +47,9 @@ public class Main extends JavaPlugin{
 		getCommand("f").setTabCompleter(tc);
 	}
 	
+	/**
+	 * Enregistrement des évenements
+	 */
 	private void registerListeners() {
 
 		PluginManager pm = getServer().getPluginManager();
@@ -50,39 +58,12 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new onPvp(), this);
 	}
 	
+	/**
+	 * Méthode static retourne le main
+	 * @return main
+	 */
 	public static Plugin getMain() {
 		return main;
-	}
-	
-	public void createTables() {
-		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/phpmyadmin", "phpmyadmin", "root");
-			getServer().getConsoleSender().sendMessage("§aConnection a la base de donnees.");
-			
-			try {
-				Statement statement = connection.createStatement();
-				
-				statement.executeUpdate("create table if not exists Factions (nom VARCHAR(100) primary key, "
-						+ "chef VARCHAR(100) not null);");
-				
-				statement.executeUpdate("create table if not exists Membres (faction VARCHAR(100) references Factions(nom), "
-						+ "joueur VARCHAR(100) primary key);");
-
-				getServer().getConsoleSender().sendMessage("§aTables crees.");
-			} catch (SQLException e) {
-				getServer().getConsoleSender().sendMessage("§4Impossible de creer les tables.");
-				e.printStackTrace();
-			}
-			
-		} catch (SQLException e) {
-
-			getServer().getConsoleSender().sendMessage("§4Erreur de connection a la base de donnees.");
-			getServer().getConsoleSender().sendMessage("§4Desactivation du plugin.");
-			Bukkit.getPluginManager().disablePlugin(this);
-			e.printStackTrace();
-		}
-		
-
 	}
 
 }
