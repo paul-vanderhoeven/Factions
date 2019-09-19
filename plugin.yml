@@ -1,6 +1,9 @@
 name: Factions
 author: Froward
 main: Factions.Main
+mcversion: 1.14.4
+description: Le célebre plugin Factions revisité par Froward.
+database: true
 version: 1.0
 commands:
   f:
