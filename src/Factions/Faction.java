@@ -7,14 +7,10 @@ import java.util.StringJoiner;
 import org.bukkit.entity.Player;
 
 public class Faction {
-	
-	private static ArrayList<Faction> listeFactions = new ArrayList<Faction>();
-	private static HashMap<Player, Faction> joueurFactions = new HashMap<Player, Faction>();
 
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
-	private Invitation demande;
 	
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
@@ -22,33 +18,24 @@ public class Faction {
 		
 		membres = new ArrayList<Player>();
 		membres.add(chef);
-		
-		int i=0;
-		while(i<listeFactions.size() && !listeFactions.get(i).getNom().equalsIgnoreCase(nom)) {
-			i++;
-		}
-		if(i>=listeFactions.size() && !joueurFactions.containsKey(chef)) {
-			listeFactions.add(this);
-			joueurFactions.put(chef, this);
-			chef.sendMessage("§aLa faction a été créé.");
-		}
-		else if(i<listeFactions.size()) {
-			chef.sendMessage("§4Ce nom de faction existe déjà.");
-		}
-		else if(joueurFactions.containsKey(chef)) {
-			chef.sendMessage("§4Vous faites déjà partie d'une faction.");
-		}
+	}
+	
+	public void save() {
+		//TO DO
 	}
 	
 	public String getNom() {
 		return nom;
 	}
 
-
+	/**
+	 * Ajout du joueurs p dans la faction
+	 * @param p
+	 */
 	public void addPlayer(Player p) {
-		membres.add(p);
-		joueurFactions.put(p, this);
+		//TO DO
 	}
+	
 	public String toString() {
 		StringJoiner joiner=new StringJoiner(",");
 		for(Player p : membres) {
@@ -78,25 +65,33 @@ public class Faction {
 	public Player getChef() {
 		return chef;
 	}
-
-	public Invitation getDemande() {
-		return demande;
-	}
-
-	public void setDemande(Invitation demande) {
-		this.demande = demande;
-	}
 	
 	public ArrayList<Player> getMembres() {
 		return membres;
 	}
 
+	/**
+	 * Retourne vrai si le joueur p fait partie de la faction
+	 * @param p joueur
+	 * @return true si le joueur p fait partie de membres
+	 */
 	public boolean appartient(Player p) {
 		return membres.contains(p);
 	}
+	
+	/**
+	 * Retourne vrai si le nom de joueur p fait partie de la faction
+	 * @param p nom du joueur
+	 * @return true si p fait partie de membres
+	 */
 	public boolean appartient(String p) {
 		return appartient(Main.getMain().getServer().getPlayer(p));
 	}
+
+	/**
+	 * @param p nom du joueur
+	 * @return le joueur qui a le nom p dans la faction, sinon null
+	 */
 	public Player getPlayer(String p) {
 		if(appartient(p)) {
 			for(Player membre : membres) {
@@ -107,46 +102,56 @@ public class Faction {
 		}
 		return null;
 	}
+	
+	/**
+	 * Envoie un message Ã  tout les membres de la faction
+	 * @param message
+	 */
 	public void broadcastFaction(String message) {
 		for(Player p : membres) {
 			p.sendMessage(message);
 		}
 	}
 	
+	/**
+	 * Supprime un joueur de la faction
+	 * @param p
+	 */
 	public void removePlayer(Player p) {
-		joueurFactions.remove(p);
+		//TO DO
 		membres.remove(p);
-
-		
 	}
 	/**
-	 * Retire le joueur de la faction, l'enlève de membres.
+	 * Retire le joueur de la faction, l'enlï¿½ve de membres.
 	 * Si le joueur est le chef => impossible, si il est le dernier joueur => supprime la faction
 	 * @param p joueur qui supprime la faction
 	 */
 	public void leave(Player p) {
+		//TO DO
 		if(membres.size()==1) {
 			removePlayer(p);
-			listeFactions.remove(this);
-			p.sendMessage("§4Vous avez quitté la faction, elle a été supprimée.");
+			p.sendMessage("ï¿½4Vous avez quittï¿½ la faction, elle a ï¿½tï¿½ supprimï¿½e.");
 		}
 		else if(getChef().equals(p)) {
-			p.sendMessage("§4Impossible, vous êtes le chef de votre faction. Utilisez /f leader pour changez de chef.");
+			p.sendMessage("ï¿½4Impossible, vous ï¿½tes le chef de votre faction. Utilisez /f leader pour changez de chef.");
 		}
 		else {
 			removePlayer(p);
-			p.sendMessage("§4Vous avez quitté la faction.");
-			broadcastFaction("§4Le joueur " + p.getName() + " a quitté la faction.");
+			p.sendMessage("ï¿½4Vous avez quittï¿½ la faction.");
+			broadcastFaction("ï¿½4Le joueur " + p.getName() + " a quittï¿½ la faction.");
 
 		}
 	}
 	
+	/**
+	 * Supprime la faction
+	 */
 	public void disband() {
-		broadcastFaction("§4La faction a été supprimé.");
+		//TO DO
+		broadcastFaction("ï¿½4La faction a ï¿½tï¿½ supprimï¿½.");
 		for(Player p : new ArrayList<Player>(membres)) {
 			removePlayer(p);
 		}
-		listeFactions.remove(this);
 	}
 	
 	/**
@@ -154,55 +159,38 @@ public class Faction {
 	 * @param p joueur qui remplace le chef
 	 */
 	public void changerChef(Player p) {
+		//TO DO
 		if(this.appartient(p)) {
 			if(getChef().equals(p)) {
-				p.sendMessage("§4Vous êtes déjà le chef.");
+				p.sendMessage("ï¿½4Vous ï¿½tes dï¿½jï¿½ le chef.");
 			}
 			else {
 				chef=p;
-				p.sendMessage("§aVous êtes maintenant le chef de cette faction.");
+				p.sendMessage("ï¿½aVous ï¿½tes maintenant le chef de cette faction.");
 				broadcastFaction(p.getName() + " est maintenant le chef de la faction.");
 			}
 		}
 
 	}
-
-	//--------------------------------Méthodes static
-	
-	public static HashMap<Player, Faction> getPlayerFaction() {
-		return joueurFactions;
-	}
-	
-	public static Faction getPlayerFaction(Player p) {
-		return joueurFactions.get(p);
-	}
-	
-	public static ArrayList<Faction> getListFaction() {
-		return listeFactions;
-	}
 	
 	/**
 	 * Renvoie la faction qui a le nom nom
-	 * @param nom nom de la faction
+	 * @param nom, nom de la faction
 	 * @return retourne la faction si une faction avec le nom nom existe, null sinon
 	 */
 	public static Faction getFaction(String nom) {
-		for(Faction faction : listeFactions) {
-			if(nom.equalsIgnoreCase(faction.getNom())) {
-				return faction;
-			}
-		}
+		//TO DO
 		return null;
 	}
+	
 	public static boolean estDansMemeFaction(Player p1, Player p2) {
-		if(joueurFactions.containsKey(p1) && joueurFactions.containsKey(p2)) {
-			return getPlayerFaction(p1).equals(getPlayerFaction(p2));
-		}
+		//TO DO
 		return false;
 	}
 	
 	public static boolean estDansFaction(Player p) {
-		return joueurFactions.containsKey(p);
+		//TO DO
+		return false;
 	}
 	
 	//--------------------------------------------------------------
