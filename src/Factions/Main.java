@@ -1,5 +1,7 @@
 package Factions;
 
+import java.sql.Connection;
+
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
@@ -12,8 +14,8 @@ import Factions.Events.onPvp;
 
 public class Main extends JavaPlugin{
 	
-	static Plugin main;
-	public SqlConnection sql;
+	private static Plugin main;
+	private static SqlConnection sql;
 	
 	// méthode au lancement du plugin
 	public void onEnable() {
@@ -28,11 +30,12 @@ public class Main extends JavaPlugin{
 		registerListeners();
 		
 		sql = new SqlConnection("localhost", "phpmyadmin", "phpmyadmin", "root");
-		sql.connection();
+		sql.connect();
 		sql.createTables();
 		
 		getServer().getConsoleSender().sendMessage("§aOK");
 		getServer().getConsoleSender().sendMessage("§a=======================");
+		
 	}
 
 	// méthode à la désactivation du plugin
@@ -68,6 +71,13 @@ public class Main extends JavaPlugin{
 	 */
 	public static Plugin getMain() {
 		return main;
+	}
+	/**
+	 * Méthode static retourne la connection à la base de donnée
+	 * @return connection
+	 */
+	public static Connection getConnection() {
+		return sql.getConnection();
 	}
 
 }

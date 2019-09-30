@@ -2,6 +2,8 @@ package Factions;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -16,36 +18,32 @@ public class SqlConnection {
 	private String database;
 	private String user;
 	private String pass;
-	
+
+	/**
+	 * Constructeur
+	 * Se connecte à la base de donnée
+	 */
 	public SqlConnection(String host, String database, String user, String pass) {
+		main=Main.getMain();
 		this.host = host;
 		this.database = database;
 		this.user = user;
 		this.pass = pass;
-		this.main = Main.getMain();
 	}
-
-	/**
-	 * Si il n'y a pas de connection alors on se connecte.
-	 * Affiche un message si erreur
-	 * Base de donnée mysql.
-	 */
-	public void connection() {
-		if(!isConnected()) {
-			try {
-				connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, user, pass);
-				main.getServer().getConsoleSender().sendMessage("§aConnecte a la base de donnees.");
+	
+	public Connection connect() {
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, user, pass);
+			main.getServer().getConsoleSender().sendMessage("§aConnecte a la base de donnees.");
 				
-			} catch (SQLException e) {
-
-				main.getServer().getConsoleSender().sendMessage("§4Erreur de connection a la base de donnees.");
-				main.getServer().getConsoleSender().sendMessage("§4Desactivation du plugin.");
-				Bukkit.getPluginManager().disablePlugin(Main.getMain());
-				e.printStackTrace();
-				main.getServer().getConsoleSender().sendMessage(e.getMessage());
-			}
+		} catch (SQLException e) {
+			main.getServer().getConsoleSender().sendMessage("§4Erreur de connection a la base de donnees.");
+			main.getServer().getConsoleSender().sendMessage("§4Desactivation du plugin.");
+			Bukkit.getPluginManager().disablePlugin(Main.getMain());
+			e.printStackTrace();
+			main.getServer().getConsoleSender().sendMessage(e.getMessage());
 		}
-
+		return connection;
 	}
 	
 	/**
@@ -62,6 +60,8 @@ public class SqlConnection {
 
 	}
 	
+
+
 	public boolean isConnected() {
 		return connection != null;
 	}
@@ -74,9 +74,11 @@ public class SqlConnection {
 	 * Crée les tables dans le bon ordre.
 	 */
 	public void createTables() {
-		createTableJoueurs();
-		createTableFactions();
-		createTableAppartenir();
+		if(isConnected()) {
+			createTableJoueurs();
+			createTableFactions();
+			createTableAppartenir();
+		}
 	}
 	
 	/**
@@ -84,7 +86,6 @@ public class SqlConnection {
 	 * Crée la table Joueurs et affiche un message si erreur
 	 */
 	private void createTableJoueurs() {
-
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS Joueurs (uuid varchar(100) PRIMARY KEY, nom varchar(100));");
@@ -125,4 +126,40 @@ public class SqlConnection {
 			e.printStackTrace();
 		}
 	}
+
+	
+	
+	public boolean existeJoueursUUID(String value) {
+		try {
+			
+			String sql = "SELECT * FROM Joueurs WHERE uuid=?;";
+			
+			PreparedStatement sta = connection.prepareStatement(sql);
+			
+			sta.setString(1, value);
+			boolean res = sta.execute();
+			return res;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public String getPlayerByUUID(String uuid) {
+		
+		try {
+			String sql = "SELECT nom FROM Joueurs WHERE uuid=?;";
+			PreparedStatement prep = connection.prepareStatement(sql);
+		
+			prep.setString(1, uuid);
+			
+			ResultSet name = prep.executeQuery();
+			return name.toString();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
