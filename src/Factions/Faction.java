@@ -1,7 +1,9 @@
 package Factions;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.StringJoiner;
 
 import org.bukkit.entity.Player;
@@ -11,17 +13,38 @@ public class Faction {
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
+	private Connection connection;
 	
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
 		this.chef = chef;
+		connection = Main.getConnection();
 		
 		membres = new ArrayList<Player>();
 		membres.add(chef);
 	}
 	
-	public void save() {
-		//TO DO
+	public void save(Player p) {
+		if(!Faction.estDansFaction(p)) {
+			try {
+				String sql = "INSERT INTO Factions(nom, uuidChef) VALUES (?, ?)";
+				PreparedStatement prep = connection.prepareStatement(sql);
+				
+				prep.setString(1, nom);
+				prep.setString(2, chef.getUniqueId().toString());
+				
+				prep.execute();
+				
+				addPlayer(chef);
+				p.sendMessage("La faction à bien été crée");
+			} catch (SQLException e) {
+				p.sendMessage("Ce nom de faction existe déjà ! Veuillez changez");
+			}
+		}
+		else {
+			p.sendMessage("Vous êtes déjà dans une faction");
+		}
+
 	}
 	
 	public String getNom() {
@@ -33,7 +56,18 @@ public class Faction {
 	 * @param p
 	 */
 	public void addPlayer(Player p) {
-		//TO DO
+		try {
+			String sql = "INSERT into Appartenir(nom, uuid) VALUES (?, ?)";
+			
+			PreparedStatement prep = connection.prepareStatement(sql);
+			
+			prep.setString(1, nom);
+			prep.setString(2, p.getUniqueId().toString());
+			
+			prep.execute();
+		} catch (SQLException e) {
+			p.sendMessage("Erreur d'ajout dans la base de donnée du joueur" + p.getName());
+		}
 	}
 	
 	public String toString() {
@@ -192,7 +226,19 @@ public class Faction {
 		//TO DO
 		return false;
 	}
-	
-	//--------------------------------------------------------------
-	
+
+	public static ArrayList<Faction> getListFaction() {
+		//TO DO
+		return null;
+	}
+
+	public static Faction getPlayerFaction(Player p) {
+		// TODO
+		return null;
+	}
+
+	public static Object estDansUneFaction(Player p) {
+		// TODO 
+		return null;
+	}	
 }

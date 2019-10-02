@@ -7,8 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import Factions.Faction;
-import Factions.Invitation;
 import Factions.Main;
 
 public class FInvite implements SubCommand {
@@ -16,7 +14,7 @@ public class FInvite implements SubCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if(sender instanceof Player) {
+		/*if(sender instanceof Player) {
 			Player p = (Player) sender;
 			
 			if(!Faction.estDansFaction(p)) {
@@ -39,13 +37,13 @@ public class FInvite implements SubCommand {
 				f.setDemande(new Invitation(f, Main.getMain().getServer().getPlayer(args[1])));
 			}
 
-		}
+		}*/
 		return true;
 	}
 	
 	public List<String> getTabCompleter(Player p1) {
 		
-		List<String> joueur = new LinkedList<String>();
+		List<String> joueur = new LinkedList<>();
 		
 		for(Player p : Main.getMain().getServer().getOnlinePlayers()) {
 			joueur.add(p.getName());

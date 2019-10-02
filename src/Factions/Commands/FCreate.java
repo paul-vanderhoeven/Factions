@@ -17,7 +17,8 @@ public class FCreate implements SubCommand {
 		if(sender instanceof Player && args.length>1) {
 			Player p = (Player) sender;
 			
-			new Faction(args[1], p);
+			Faction f = new Faction(args[1], p);
+			f.save(p);
 		}
 		else {
 			return false;
