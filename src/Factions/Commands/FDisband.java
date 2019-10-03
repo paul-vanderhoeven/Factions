@@ -19,16 +19,16 @@ public class FDisband implements SubCommand {
 			if(p.isOp()) {
 				Faction f = Faction.getFaction(args[1]);
 				if(f == null) {
-					p.sendMessage("§4La faction n'existe pas.");
+					p.sendMessage("ï¿½4La faction n'existe pas.");
 					return true;
 				}
 				else {
-					f.disband();
+					f.disband(p);
 					return true;
 				}
 			}
 			else {
-				p.sendMessage("§4Vous n'êtes pas administrateur.");
+				p.sendMessage("ï¿½4Vous n'ï¿½tes pas administrateur.");
 				return true;
 			}
 		}

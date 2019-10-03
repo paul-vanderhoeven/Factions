@@ -26,7 +26,7 @@ public class FStatus implements SubCommand {
 			
 			if(args.length==1) {
 				
-				if(Faction.estDansFaction(p)) {
+				if(Faction.estDansUneFaction(p)) {
 					p.sendMessage(Faction.getPlayerFaction(p).toString());
 					return true;
 				}
