@@ -24,7 +24,6 @@ public class Main extends JavaPlugin{
 		registerCommands();
 		registerListeners();
 		
-		SqlConnection.createDatabase();
 		SqlConnection.connect();
 		SqlConnection.createTables();
 		

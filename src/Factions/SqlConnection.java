@@ -21,7 +21,7 @@ public class SqlConnection {
 	public static Connection connect() {		
 		try {
 			connection = DriverManager.getConnection(url);
-			System.out.println("Connecté");
+			System.out.println("Connecté à la base de données");
 				
 		} catch (SQLException e) {
 			System.out.println("§4Erreur de connection à la base de données");
@@ -30,17 +30,6 @@ public class SqlConnection {
 			e.printStackTrace();
 		}
 		return connection;
-	}
-
-	public static void createDatabase() {
-		try (Connection conn = DriverManager.getConnection(url)) {
-			if (conn != null) {
-				System.out.println("Base de données crée");
-			}
-		} catch (SQLException e) {
-            System.out.println(e.getMessage());
-		}
-		
 	}
 	
 	/**
