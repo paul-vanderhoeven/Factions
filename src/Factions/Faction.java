@@ -19,7 +19,7 @@ public class Faction {
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
 		this.chef = chef;
-		connection = Main.getConnection();
+		connection = SqlConnection.getConnection();
 		
 		membres = new ArrayList<Player>();
 		membres.add(chef);

@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import Factions.Main;
+import Factions.SqlConnection;
 
 public class onPlayerJoin implements Listener {
 
@@ -18,7 +18,7 @@ public class onPlayerJoin implements Listener {
 	}
 	
 	private void addPlayer(String uuid, String name) {
-		Connection connection = Main.getConnection();
+		Connection connection = SqlConnection.getConnection();
 		try {
 			String sql = "INSERT INTO Joueurs(uuid, nom) VALUES (?, ?)";
 			PreparedStatement prep = connection.prepareStatement(sql);

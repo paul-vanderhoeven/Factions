@@ -8,42 +8,39 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 public class SqlConnection {
 	
-	private Connection connection;
-	private Plugin main;
-	private String host;
-	private String database;
-	private String user;
-	private String pass;
+	private static Connection connection;
+	private static String url = "jdbc:sqlite:" + System.getProperty("user.dir") + "/plugins/factions.db";
 
 	/**
 	 * Constructeur
-	 * Se connecte à la base de donnée
 	 */
-	public SqlConnection(String host, String database, String user, String pass) {
-		main=Main.getMain();
-		this.host = host;
-		this.database = database;
-		this.user = user;
-		this.pass = pass;
-	}
-	
-	public Connection connect() {
+
+	public static Connection connect() {		
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, user, pass);
-			main.getServer().getConsoleSender().sendMessage("§aConnecte a la base de donnees.");
+			connection = DriverManager.getConnection(url);
+			System.out.println("Connecté");
 				
 		} catch (SQLException e) {
-			main.getServer().getConsoleSender().sendMessage("§4Erreur de connection a la base de donnees.");
-			main.getServer().getConsoleSender().sendMessage("§4Desactivation du plugin.");
+			System.out.println("§4Erreur de connection à la base de données");
+			System.out.println("§4Désactivation du plugin");
 			Bukkit.getPluginManager().disablePlugin(Main.getMain());
 			e.printStackTrace();
-			main.getServer().getConsoleSender().sendMessage(e.getMessage());
 		}
 		return connection;
+	}
+
+	public static void createDatabase() {
+		try (Connection conn = DriverManager.getConnection(url)) {
+			if (conn != null) {
+				System.out.println("Base de données crée");
+			}
+		} catch (SQLException e) {
+            System.out.println(e.getMessage());
+		}
+		
 	}
 	
 	/**
@@ -62,18 +59,18 @@ public class SqlConnection {
 	
 
 
-	public boolean isConnected() {
+	public static boolean isConnected() {
 		return connection != null;
 	}
 	
-	public Connection getConnection() {
+	public static Connection getConnection() {
 		return connection;
 	}
 	
 	/**
 	 * Crée les tables dans le bon ordre.
 	 */
-	public void createTables() {
+	public static void createTables() {
 		if(isConnected()) {
 			createTableJoueurs();
 			createTableFactions();
@@ -85,12 +82,12 @@ public class SqlConnection {
 	 * Pré-requis: on considère que la connection à été effectué donc l'attribut connection n'est pas null
 	 * Crée la table Joueurs et affiche un message si erreur
 	 */
-	private void createTableJoueurs() {
+	private static void createTableJoueurs() {
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS Joueurs (uuid varchar(100) PRIMARY KEY, nom varchar(100));");
 		} catch (SQLException e) {
-			main.getServer().getConsoleSender().sendMessage("§4Erreur lors de la creation de la table Joueurs.");
+			System.out.println("§4Erreur lors de la création de la table Joueurs.");
 			e.printStackTrace();
 		}
 	}
@@ -99,13 +96,13 @@ public class SqlConnection {
 	 * Pré-requis: on considère que la connection à été effectué donc l'attribut connection n'est pas null
 	 * Crée la table Factions et affiche un message si erreur
 	 */
-	private void createTableFactions() {
+	private static void createTableFactions() {
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS Factions (nom varchar(100) PRIMARY KEY, uuidChef varchar(100),\n" + 
 					"                                    CONSTRAINT fk_uuid FOREIGN KEY (uuidChef) REFERENCES Joueurs(uuid));");
 		} catch (SQLException e) {
-			main.getServer().getConsoleSender().sendMessage("§4Erreur lors de la creation de la table Factions.");
+			System.out.println("§4Erreur lors de la création de la table Factions.");
 			e.printStackTrace();
 		}
 	}
@@ -114,7 +111,7 @@ public class SqlConnection {
 	 * Pré-requis: on considère que la connection à été effectué donc l'attribut connection n'est pas null
 	 * Crée la table Appartenir et affiche un message si erreur
 	 */
-	private void createTableAppartenir() {
+	private static void createTableAppartenir() {
 		try {			
 			Statement statement = connection.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS Appartenir (nom varchar(100), uuid varchar(100), \n" + 
@@ -122,7 +119,7 @@ public class SqlConnection {
 					"                         CONSTRAINT fk_nom_appartenir FOREIGN KEY (nom) REFERENCES Factions(nom),\n" + 
 					"                         CONSTRAINT fk_uuid_appartenir	 FOREIGN KEY (uuid) REFERENCES Joueurs(uuid));");
 		} catch (SQLException e) {
-			main.getServer().getConsoleSender().sendMessage("§4Erreur lors de la creation de la table Appartenir.");
+			System.out.println("§4Erreur lors de la création de la table Appartenir.");
 			e.printStackTrace();
 		}
 	}

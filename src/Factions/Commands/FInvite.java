@@ -7,8 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import Factions.Main;
-
 public class FInvite implements SubCommand {
 
 	@Override
@@ -45,7 +43,7 @@ public class FInvite implements SubCommand {
 		
 		List<String> joueur = new LinkedList<>();
 		
-		for(Player p : Main.getMain().getServer().getOnlinePlayers()) {
+		for(Player p : p1.getServer().getOnlinePlayers()) {
 			joueur.add(p.getName());
 		}
 		return joueur;
