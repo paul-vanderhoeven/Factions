@@ -2,10 +2,12 @@ package Factions;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -14,12 +16,11 @@ public class Faction {
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
-	private Connection connection;
+	private static Connection connection = SqlConnection.getConnection();
 	
 	public Faction(String nom, Player chef) {
 		this.nom = nom;
 		this.chef = chef;
-		connection = SqlConnection.getConnection();
 		
 		membres = new ArrayList<Player>();
 		membres.add(chef);
@@ -117,6 +118,9 @@ public class Faction {
 	}
 	public boolean estChef(Player p) {
 		return getChef().equals(p);
+	}
+	private void setMembres(ArrayList<Player> membres) {
+		this.membres = membres;
 	}
 	
 	public ArrayList<Player> getMembres() {
@@ -261,8 +265,40 @@ public class Faction {
 	 * @return retourne la faction si une faction avec le nom nom existe, null sinon
 	 */
 	public static Faction getFaction(String nom) {
-		//TO DO
-		return null;
+		String sql = "SELECT * FROM Factions WHERE nom=?";
+		Faction f = null;
+		try {
+			PreparedStatement requete = connection.prepareStatement("SELECT * FROM Factions WHERE nom=?");
+			requete.setString(1, nom);
+			ResultSet rs = requete.executeQuery();
+			
+			String fnom = rs.getString(1);
+			UUID uuid = UUID.fromString(rs.getString(2));
+			
+			f = new Faction(fnom, Main.getMain().getServer().getPlayer(uuid));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		f.setMembres(Faction.getMembres(nom));
+		return f;
+	}
+	
+	private static ArrayList<Player> getMembres(String nom) {
+		ArrayList<Player> membres = new ArrayList<>();
+		String sql = "SELECT uuid FROM Appartenir WHERE nom=?";
+		try {
+			PreparedStatement requete = connection.prepareStatement(sql);
+			requete.setString(1, nom);
+			ResultSet rs = requete.executeQuery();
+			
+			while(rs.next()) {
+				Player p = Main.getMain().getServer().getPlayer(UUID.fromString(rs.getString("uuid")));
+				membres.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return membres;
 	}
 	public static boolean existe(String nom) {
 		
@@ -270,7 +306,7 @@ public class Faction {
 	}
 	
 	public static boolean estDansMemeFaction(Player p1, Player p2) {
-		//TO DO
+		
 		return false;
 	}
 
@@ -280,7 +316,7 @@ public class Faction {
 	}
 
 	public static Faction getPlayerFaction(Player p) {
-		// TODO
+		
 		return null;
 	}
 
