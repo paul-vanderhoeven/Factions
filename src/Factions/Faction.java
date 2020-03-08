@@ -268,7 +268,7 @@ public class Faction {
 		String sql = "SELECT * FROM Factions WHERE nom=?";
 		Faction f = null;
 		try {
-			PreparedStatement requete = connection.prepareStatement("SELECT * FROM Factions WHERE nom=?");
+			PreparedStatement requete = connection.prepareStatement(sql);
 			requete.setString(1, nom);
 			ResultSet rs = requete.executeQuery();
 			
@@ -316,8 +316,20 @@ public class Faction {
 	}
 
 	public static Faction getPlayerFaction(Player p) {
+		String sql = "SELECT nom FROM Appartenir WHERE uuid=?";
+		String fnom;
 		
-		return null;
+		try {
+			PreparedStatement requete = connection.prepareStatement(sql);
+			requete.setString(1, p.getUniqueId().toString());
+			ResultSet rs = requete.executeQuery();
+			
+			fnom = rs.getString(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return Faction.getFaction(fnom);
 	}
 
 	public static boolean estDansUneFaction(Player p) {
