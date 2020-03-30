@@ -315,8 +315,24 @@ public class Faction {
 	}
 
 	public static ArrayList<Faction> getListFaction() {
-		//TO DO
-		return null;
+		String sql = "SELECT * FROM Faction;";
+		ArrayList<Faction> list = new ArrayList<>();
+		
+		try {
+			PreparedStatement requete = connection.prepareStatement(sql);
+			requete.setString(1, p.getUniqueId().toString());
+			ResultSet rs = requete.executeQuery();
+			
+			while(rs.next()) {
+				Faction f = new Faction(rs.getString(0), Main.getMain().getServer().getPlayer(rs.getString(1)));
+				f.setMembres(Faction.getMembres(rs.getString(0)));
+				list.add(f);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public static Faction getPlayerFaction(Player p) {
