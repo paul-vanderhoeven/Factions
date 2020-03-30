@@ -307,7 +307,11 @@ public class Faction {
 	
 	public static boolean estDansMemeFaction(Player p1, Player p2) {
 		
-		return false;
+		if(Faction.estDansUneFaction(p1) && Faction.estDansUneFaction(p2) && Faction.getPlayerFaction(p1).equals(Faction.getPlayerFaction(p2))) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static ArrayList<Faction> getListFaction() {
@@ -317,7 +321,7 @@ public class Faction {
 
 	public static Faction getPlayerFaction(Player p) {
 		String sql = "SELECT nom FROM Appartenir WHERE uuid=?";
-		String fnom;
+		String fnom = null;
 		
 		try {
 			PreparedStatement requete = connection.prepareStatement(sql);
@@ -333,7 +337,24 @@ public class Faction {
 	}
 
 	public static boolean estDansUneFaction(Player p) {
-		// TODO 
-		return false;
+		
+		String sql = "SELECT count(nom) as nb FROM Appartenir WHERE uuid=?";
+		int nb = 0;
+		
+		try {
+			PreparedStatement requete = connection.prepareStatement(sql);
+			requete.setString(1, p.getUniqueId().toString());
+			ResultSet rs = requete.executeQuery();
+			
+			nb = rs.getInt(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(nb == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}	
 }
