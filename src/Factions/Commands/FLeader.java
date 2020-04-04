@@ -16,19 +16,23 @@ public class FLeader implements SubCommand {
 
 		if(sender instanceof Player && args.length == 2) {
 			Player p = (Player) sender;
-			Faction f = Faction.getPlayerFaction(p);
+			
+			if(Faction.estDansUneFaction(p)) {
+				Faction f = Faction.getPlayerFaction(p);
 
-			Player ciblePlayer = f.getPlayer(args[1]);
-			if(ciblePlayer == null) {
-				p.sendMessage("§4Le joueur ne fait pas partie de la faction.");
+				Player ciblePlayer = f.getPlayer(args[1]);
+				if(ciblePlayer == null) {
+					p.sendMessage("ï¿½4Le joueur ne fait pas partie de la faction.");
+				}
+				else if(!f.getChef().equals(p)) {
+					p.sendMessage("ï¿½4Vous n'ï¿½tes pas le chef de votre faction, demandez lui.");
+				}
+				else {
+					f.changerChef(ciblePlayer);
+				}
+				return true;
 			}
-			else if(!f.getChef().equals(p)) {
-				p.sendMessage("§4Vous n'êtes pas le chef de votre faction, demandez lui.");
-			}
-			else {
-				f.changerChef(ciblePlayer);
-			}
-			return true;
+			p.sendMessage("Vous n'Ãªtes pas dans une faction");
 		}
 		return false;
 	}
@@ -38,11 +42,13 @@ public class FLeader implements SubCommand {
 		
 		ArrayList<String> tab = new ArrayList<String>();
 		
-		for(Player p1 : Faction.getPlayerFaction(p).getMembres()) {
-			tab.add(p1.getName());
+		if(Faction.estDansUneFaction(p)) {
+			for(Player p1 : Faction.getPlayerFaction(p).getMembres()) {
+				tab.add(p1.getName());
+			}
+			return tab;
 		}
-		
-		return tab;
+		return new ArrayList<String>();
 	}
 
 

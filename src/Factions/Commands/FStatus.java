@@ -32,7 +32,7 @@ public class FStatus implements SubCommand {
 				}
 				else {
 					p.sendMessage("�4Vous n'�tes pas dans une faction");
-					return false;
+					return true;
 				}	
 			}
 			

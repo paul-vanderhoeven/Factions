@@ -16,11 +16,18 @@ public class FLeave implements SubCommand {
 
 		if(sender instanceof Player) {
 			Player p = (Player) sender;
-			Faction f = Faction.getPlayerFaction(p);
-			f.leave(p);
+			
+			if(Faction.estDansUneFaction(p)) {
+				Faction.getPlayerFaction(p).leave(p);
+				return true;
+			}
+			else {
+				p.sendMessage("Vous n'êtes pas dans une faction");
+			}
 			return true;
 		}
-		return false;
+		sender.sendMessage("La console ne peut pas jouer !");
+		return true;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class FDisband implements SubCommand {
 				}
 			}
 			else {
-				p.sendMessage("�4Vous n'�tes pas administrateur.");
+				p.sendMessage("Seuls les administrateur peuvent supprimer les factions !");
 				return true;
 			}
 		}

@@ -19,6 +19,7 @@ public class FCreate implements SubCommand {
 			
 			Faction f = new Faction(args[1], p);
 			f.save(p);
+
 		}
 		else {
 			return false;

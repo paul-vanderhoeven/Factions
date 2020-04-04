@@ -47,7 +47,7 @@ public class Faction {
 				
 			prep.execute();
 				
-			addPlayer(chef);
+			addPlayerAux(chef);
 			p.sendMessage("La faction à bien été crée");
 		} catch (SQLException e) {
 			p.sendMessage("Erreur lors de la sauvegarde de la faction dans la base de donnée");
@@ -179,7 +179,7 @@ public class Faction {
 	 */
 	private void removePlayer(Player p) {
 		try {
-			String sql = "DELETE FROM Appartenir WHERE nom='" + p.getName() + "'";
+			String sql = "DELETE FROM Appartenir WHERE uuid='" + p.getUniqueId() + "'";
 			Statement sta = connection.createStatement();
 			sta.execute(sql);
 			membres.remove(p);
@@ -208,7 +208,8 @@ public class Faction {
 	 */
 	public void leave(Player p) {
 		if(membres.size()==1) {
-			p.sendMessage("Vous êtes le dernier membre de la faction, si vous la supprimez utilisez: /f disband");
+			delete(p);
+			p.sendMessage("La faction a été supprimé");
 		}
 		else if(estChef(p)) {
 			p.sendMessage("�4Impossible, vous �tes le chef de votre faction. Utilisez /f leader pour changez de chef.");
@@ -226,6 +227,7 @@ public class Faction {
 	 */
 	private void delete(Player p) {
 		try {
+			removePlayer(p);
 			String sql = "DELETE FROM Factions WHERE nom='" + nom + "'";
 			Statement sta = connection.createStatement();
 			sta.execute(sql);
@@ -272,10 +274,13 @@ public class Faction {
 			requete.setString(1, nom);
 			ResultSet rs = requete.executeQuery();
 			
-			String fnom = rs.getString(1);
-			UUID uuid = UUID.fromString(rs.getString(2));
+			if(rs.isClosed()) {
+				return null;
+			}
 			
-			f = new Faction(fnom, Main.getMain().getServer().getPlayer(uuid));
+			UUID uuid = UUID.fromString(rs.getString("uuidChef"));
+			
+			f = new Faction(nom, Main.getMain().getServer().getPlayer(uuid));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -315,17 +320,16 @@ public class Faction {
 	}
 
 	public static ArrayList<Faction> getListFaction() {
-		String sql = "SELECT * FROM Faction;";
+		String sql = "SELECT * FROM Factions;";
 		ArrayList<Faction> list = new ArrayList<>();
 		
 		try {
 			PreparedStatement requete = connection.prepareStatement(sql);
-			requete.setString(1, p.getUniqueId().toString());
 			ResultSet rs = requete.executeQuery();
 			
 			while(rs.next()) {
-				Faction f = new Faction(rs.getString(0), Main.getMain().getServer().getPlayer(rs.getString(1)));
-				f.setMembres(Faction.getMembres(rs.getString(0)));
+				Faction f = new Faction(rs.getString("nom"), Main.getMain().getServer().getPlayer(UUID.fromString(rs.getString("uuidChef"))));
+				f.setMembres(Faction.getMembres(rs.getString("nom")));
 				list.add(f);
 			}
 			
@@ -344,7 +348,7 @@ public class Faction {
 			requete.setString(1, p.getUniqueId().toString());
 			ResultSet rs = requete.executeQuery();
 			
-			fnom = rs.getString(1);
+			fnom = rs.getString("nom");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -362,7 +366,7 @@ public class Faction {
 			requete.setString(1, p.getUniqueId().toString());
 			ResultSet rs = requete.executeQuery();
 			
-			nb = rs.getInt(1);
+			nb = rs.getInt("nb");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
