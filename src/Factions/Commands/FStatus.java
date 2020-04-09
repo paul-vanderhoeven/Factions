@@ -63,6 +63,11 @@ public class FStatus implements SubCommand {
 		}
 		return tab;
 	}
+
+	@Override
+	public boolean isCommandAdmin() {
+		return false;
+	}
 	
 	
 

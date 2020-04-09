@@ -16,6 +16,7 @@ public class Faction {
 	private String nom;
 	private Player chef;
 	private ArrayList<Player> membres;
+	private static ArrayList<Invitation> invitations = new ArrayList<>();
 	private static Connection connection = SqlConnection.getConnection();
 	
 	public Faction(String nom, Player chef) {
@@ -74,6 +75,7 @@ public class Faction {
 		try {
 			String sql = "INSERT into Appartenir(nom, uuid) VALUES (?, ?)";
 			
+			System.out.println(sql);
 			PreparedStatement prep = connection.prepareStatement(sql);
 			
 			prep.setString(1, nom);
@@ -81,7 +83,7 @@ public class Faction {
 			
 			prep.execute();
 		} catch (SQLException e) {
-			p.sendMessage("Erreur lors de l'ajout dans la base de donnée du joueur" + p.getName());
+			p.sendMessage("Erreur lors de l'ajout dans la base de donnée du joueur " + p.getName());
 		}
 	}
 	
@@ -258,7 +260,29 @@ public class Faction {
 				broadcastFaction(p.getName() + " est maintenant le chef de la faction.");
 			}
 		}
-
+	}
+	
+	public void invite(Player player) {
+		invitations.add(new Invitation(nom, player));
+	}
+	
+	public void join(Player player) {
+		Invitation inv = null;
+		System.out.println(invitations.size());
+		
+		for(Invitation i : invitations) {
+			if(i.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				inv = i;
+				break;
+			}
+		}
+		
+		if(inv == null) {
+			player.sendMessage("Vous n'avez pas été invité dans cette faction");
+		} else {
+			inv.accept();
+			invitations.remove(inv);
+		}
 	}
 	
 	/**
@@ -376,5 +400,7 @@ public class Faction {
 		} else {
 			return false;
 		}
-	}	
+	}
+
+
 }

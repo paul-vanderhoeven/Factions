@@ -46,4 +46,9 @@ public class FDisband implements SubCommand {
 		return tab;
 	}
 
+	@Override
+	public boolean isCommandAdmin() {
+		return true;
+	}
+
 }

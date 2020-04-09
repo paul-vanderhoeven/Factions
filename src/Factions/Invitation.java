@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 
 public class Invitation {
 
-	private Faction faction;
+	private String faction;
 	private Player player;
 	private long time;
 	
 	
-	public Invitation(Faction faction, Player player) {
+	public Invitation(String faction, Player player) {
 		this.faction = faction;
 		this.player = player;
 		Date date = new Date();
@@ -22,13 +22,14 @@ public class Invitation {
 		Date date = new Date();
 		if(time+60000 >= date.getTime()) {
 			
-			faction.addPlayer(player);
+			Faction f = Faction.getFaction(faction);
+			f.addPlayer(player);
 			
-			faction.broadcastFaction("§aLe joueur " + player.getName() + " a rejoint la faction.");
-			player.sendMessage("§aVous avez rejoint la faction.");
+			f.broadcastFaction("ï¿½aLe joueur " + player.getName() + " a rejoint la faction.");
+			player.sendMessage("ï¿½aVous avez rejoint la faction.");
 		}
 		else {
-			player.sendMessage("§4Trop tard!");
+			player.sendMessage("ï¿½4Trop tard!");
 		}
 	}
 	

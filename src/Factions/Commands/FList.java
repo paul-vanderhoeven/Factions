@@ -30,4 +30,9 @@ public class FList implements SubCommand {
 		return new ArrayList<String>();
 	}
 
+	@Override
+	public boolean isCommandAdmin() {
+		return false;
+	}
+
 }

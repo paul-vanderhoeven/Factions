@@ -13,8 +13,19 @@ public class FJoin implements SubCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		if(sender instanceof Player) {
+			Player p = (Player) sender;
 			
-		return false;
+			if(args.length == 1) {
+				p.sendMessage("Quelle faction ?");
+			} else if(!Faction.existe(args[1])) {
+				p.sendMessage("La faction n'existe pas !");
+			} else {
+				Faction.getFaction(args[1]).join(p);
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -26,6 +37,11 @@ public class FJoin implements SubCommand {
 			tab.add(f.getNom());
 		}
 		return tab;
+	}
+
+	@Override
+	public boolean isCommandAdmin() {
+		return false;
 	}
 
 }

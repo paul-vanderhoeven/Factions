@@ -41,7 +41,11 @@ public class FCommand implements CommandExecutor, TabCompleter {
 		if(sender instanceof Player) {
 			Player p = (Player) sender;
 			if(args.length==1) {
-				tab.addAll(subcommand.keySet());
+				for (String s : subcommand.keySet()) {
+					if(!subcommand.get(s).isCommandAdmin() || p.isOp()) {
+						tab.add(s);
+					}
+				}
 			}
 			else {
 				if(subcommand.containsKey(args[0])) {

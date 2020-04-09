@@ -11,4 +11,6 @@ public interface SubCommand {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args);
 
 	public List<String> getTabCompleter(Player sender);
+	
+	public boolean isCommandAdmin();
 }

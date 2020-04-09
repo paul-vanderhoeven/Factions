@@ -51,5 +51,10 @@ public class FLeader implements SubCommand {
 		return new ArrayList<String>();
 	}
 
+	@Override
+	public boolean isCommandAdmin() {
+		return false;
+	}
+
 
 }
