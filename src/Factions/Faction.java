@@ -75,7 +75,6 @@ public class Faction {
 		try {
 			String sql = "INSERT into Appartenir(nom, uuid) VALUES (?, ?)";
 			
-			System.out.println(sql);
 			PreparedStatement prep = connection.prepareStatement(sql);
 			
 			prep.setString(1, nom);
@@ -255,10 +254,24 @@ public class Faction {
 				p.sendMessage("�4Vous �tes d�j� le chef.");
 			}
 			else {
-				chef=p;
+				changerChefAux(p);
 				p.sendMessage("�aVous �tes maintenant le chef de cette faction.");
 				broadcastFaction(p.getName() + " est maintenant le chef de la faction.");
 			}
+		}
+	}
+
+	private void changerChefAux(Player p) {
+		try {
+			String sql = "UPDATE Factions SET uuidChef='" + p.getUniqueId() + "' WHERE nom=?";
+			PreparedStatement sta = connection.prepareStatement(sql);
+			
+			sta.setString(1, nom);
+			
+			sta.execute();
+		} catch (SQLException e) {
+			p.sendMessage("Erreur lors du changement du chef de la faction");
+			e.printStackTrace();
 		}
 	}
 	

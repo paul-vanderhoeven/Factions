@@ -33,10 +33,16 @@ public class FInvite implements SubCommand {
 			}
 			else {
 				Faction f = Faction.getPlayerFaction(p);
-				p.sendMessage("�avous avez envoy� une invitation � " + Main.getMain().getServer().getPlayer(args[1]).getName());
 				
-				Main.getMain().getServer().getPlayer(args[1]).sendMessage("�aVous avez re�u une invitation � rejoindre la faction " + f.getNom() + ". Vous avez 60s pour accepter => /f join " + f.getNom());
-				f.invite(Main.getMain().getServer().getPlayer(args[1]));
+				if(f.estMembre(args[1])) {
+					p.sendMessage("Le joueur est déjà membre de la faction");
+				} else {
+					p.sendMessage("�avous avez envoy� une invitation � " + Main.getMain().getServer().getPlayer(args[1]).getName());
+					
+					Main.getMain().getServer().getPlayer(args[1]).sendMessage("�aVous avez re�u une invitation � rejoindre la faction " + f.getNom() + ". Vous avez 60s pour accepter => /f join " + f.getNom());
+					f.invite(Main.getMain().getServer().getPlayer(args[1]));
+				}
+
 			}
 
 		}
